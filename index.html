@@ -1,0 +1,87 @@
+<script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('active');
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    const burger = document.getElementById('burger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const bar1 = document.getElementById('bar1');
+    const bar2 = document.getElementById('bar2');
+    const bar3 = document.getElementById('bar3');
+    let menuOpen = false;
+
+    burger.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      mobileMenu.classList.toggle('open', menuOpen);
+      bar1.style.transform = menuOpen ? 'rotate(45deg) translate(4px, 4px)' : '';
+      bar2.style.opacity = menuOpen ? '0' : '1';
+      bar3.style.transform = menuOpen ? 'rotate(-45deg) translate(4px, -4px)' : '';
+    });
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        menuOpen = false;
+        mobileMenu.classList.remove('open');
+        bar1.style.transform = '';
+        bar2.style.opacity = '1';
+        bar3.style.transform = '';
+      });
+    });
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    // ===== WHATSAPP FORM =====
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const form = e.target;
+      const inputs = form.querySelectorAll('input, select, textarea');
+
+      const imie = inputs[0].value.trim();
+      const telefon = inputs[1].value.trim();
+      const usluga = inputs[2].value;
+      const trasa = inputs[3].value.trim();
+      const uwagi = inputs[4].value.trim();
+
+      // Mapa nazw usług
+      const uslugaMapa = {
+        'lotnisko': 'Transfer lotniskowy',
+        'wycieczka': 'Wycieczka / Integracja firmowa',
+        'wesele': 'Wesele / Uroczystość',
+        'pracownicze': 'Przewóz pracowniczy',
+        'miejska': 'Obsługa miejska Wrocław',
+        'pielgrzymka': 'Pielgrzymka',
+        'inne': 'Inne'
+      };
+
+      // Budujemy wiadomość
+      let wiadomosc = `🚌 *Zapytanie ze strony Verola Travel*\n\n`;
+      wiadomosc += `👤 *Imię:* ${imie}\n`;
+      wiadomosc += `📞 *Telefon:* ${telefon}\n`;
+      wiadomosc += `🛠️ *Usługa:* ${uslugaMapa[usluga] || usluga}\n`;
+      wiadomosc += `📍 *Trasa:* ${trasa}\n`;
+      if (uwagi) {
+        wiadomosc += `💬 *Uwagi:* ${uwagi}\n`;
+      }
+
+      // Kodujemy dla URL
+      const encoded = encodeURIComponent(wiadomosc);
+
+      // Otwieramy WhatsApp
+      window.open(`https://wa.me/48512971017?text=${encoded}`, '_blank');
+
+      // Pokazujemy potwierdzenie
+      showToast('✓ Przekierowuję do WhatsApp...');
+
+      // Czyścimy formularz
+      form.reset();
+    });
+</script>
