@@ -1,4 +1,480 @@
-<script>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verola Travel — Turystyka i Transfery | Wrocław</title>
+  <meta name="description" content="Licencjonowany przewoźnik we Wrocławiu. Toyota Proace Verso 2025, 8+1 miejsc. Wycieczki, transfery lotniskowe, wesela, przewozy pracownicze. Od 2,50 zł/km.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FDFCF8',
+            savor: '#F3EFE0',
+          },
+          borderRadius: {
+            '4xl': '2rem',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    .font-serif { font-family: 'Playfair Display', serif; }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-up {
+      animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+    }
+    .reveal {
+      opacity: 0;
+      filter: blur(8px);
+      transform: translateY(24px);
+      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.active {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+    }
+    .glass-card {
+      background: rgba(28, 25, 23, 0.4);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 500ms;
+    }
+    .glass-card:hover {
+      background: rgba(28, 25, 23, 0.6);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .light-sweep {
+      position: relative;
+      overflow: hidden;
+    }
+    .light-sweep::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent);
+      transform: translateX(-100%) skewX(-12deg);
+      transition: transform 800ms ease-in-out;
+    }
+    .light-sweep:hover::after {
+      transform: translateX(100%) skewX(-12deg);
+    }
+    html { scroll-behavior: smooth; }
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #1c1917;
+      color: #FDFCF8;
+      padding: 1rem 2rem;
+      border-radius: 1rem;
+      font-size: 0.875rem;
+      z-index: 9999;
+      transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+    .mobile-menu {
+      transform: translateY(-20px);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 300ms ease;
+    }
+    .mobile-menu.open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: all;
+    }
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .price-row:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body class="bg-stone-950 text-cream">
+
+  <div id="toast" class="toast"></div>
+
+  <nav class="fixed top-0 left-0 right-0 z-50 h-20 flex items-center px-6 backdrop-blur-xl bg-stone-950/70 border-b border-white/5">
+    <div class="max-w-screen-2xl mx-auto w-full flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <img src="https://z-cdn-media.chatglm.cn/files/9c5809b0-01fd-4c9a-a666-6affd0610a04.jpeg?auth_key=1878773871-42a0b7b537b04fadae049b42c9d64044-0-5c5b34b0e84966b30ec0074cb4524aa5" alt="Verola Travel" class="h-10 w-10 rounded-xl object-cover">
+        <span class="font-serif text-xl font-semibold tracking-tight hidden sm:inline">Verola<span class="text-green-500">Travel</span></span>
+      </a>
+      <div class="hidden lg:flex items-center gap-8 text-sm tracking-wide">
+        <a href="#uslugi" class="text-stone-400 hover:text-cream transition-colors">Usługi</a>
+        <a href="#autopark" class="text-stone-400 hover:text-cream transition-colors">Pojazd</a>
+        <a href="#ceny" class="text-stone-400 hover:text-cream transition-colors">Cennik</a>
+        <a href="#wycieczki" class="text-stone-400 hover:text-cream transition-colors">Wycieczki</a>
+        <a href="#kontakt" class="bg-green-600 hover:bg-green-500 text-white text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-full transition-all hover:scale-105 light-sweep">Zarezerwuj</a>
+      </div>
+      <button id="burger" class="lg:hidden flex flex-col gap-1.5 p-2" aria-label="Menu">
+        <span class="block w-6 h-0.5 bg-cream transition-all" id="bar1"></span>
+        <span class="block w-6 h-0.5 bg-cream transition-all" id="bar2"></span>
+        <span class="block w-6 h-0.5 bg-cream transition-all" id="bar3"></span>
+      </button>
+    </div>
+    <div id="mobileMenu" class="mobile-menu absolute top-20 left-0 right-0 bg-stone-950/95 backdrop-blur-xl border-b border-white/5 lg:hidden">
+      <div class="flex flex-col p-6 gap-4 text-sm tracking-wide">
+        <a href="#uslugi" class="text-stone-400 hover:text-cream transition-colors py-2 mobile-link">Usługi</a>
+        <a href="#autopark" class="text-stone-400 hover:text-cream transition-colors py-2 mobile-link">Pojazd</a>
+        <a href="#ceny" class="text-stone-400 hover:text-cream transition-colors py-2 mobile-link">Cennik</a>
+        <a href="#wycieczki" class="text-stone-400 hover:text-cream transition-colors py-2 mobile-link">Wycieczki</a>
+        <a href="#kontakt" class="bg-green-600 text-white text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-full text-center mt-2 mobile-link">Zarezerwuj</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="relative h-[90vh] flex items-center justify-center overflow-hidden rounded-b-[3rem]">
+    <img src="https://picsum.photos/seed/wroclaw-panorama-night/1920/1080.jpg" alt="Wrocław" class="absolute inset-0 w-full h-full object-cover scale-105" style="animation: pulse 15s ease-in-out infinite;">
+    <div class="absolute inset-0 bg-gradient-to-b from-stone-950 via-stone-950/60 to-stone-950"></div>
+    <div class="relative z-10 text-center px-6 max-w-4xl">
+      <div class="animate-fade-in-up">
+        <span class="inline-block text-xs font-bold uppercase tracking-[0.3em] text-green-500 mb-6 bg-green-500/10 px-4 py-2 rounded-full">Wrocław • Od 2,50 zł/km</span>
+      </div>
+      <h1 class="font-serif text-5xl md:text-8xl font-normal leading-[0.85] tracking-tighter animate-fade-in-up" style="animation-delay: 150ms;">
+        Verola<br><span class="italic text-green-500">Travel</span>
+      </h1>
+      <p class="text-lg md:text-xl font-light text-stone-400 mt-8 max-w-2xl mx-auto leading-relaxed animate-fade-in-up" style="animation-delay: 300ms;">
+        Nowa Toyota Proace Verso 2025. Transfery lotniskowe, wycieczki, wesela. Komfortowo, bezpiecznie, na czas.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10 animate-fade-in-up" style="animation-delay: 450ms;">
+        <a href="https://wa.me/48512971017?text=Dzie%C5%84%20dobry,%20chcia%C5%82bym%20zapyta%C4%87%20o%20przejazd." target="_blank" class="bg-[#25D366] hover:bg-[#22c55e] text-white text-sm font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all hover:scale-105 flex items-center gap-2">
+          <span class="iconify text-lg" data-icon="mdi:whatsapp"></span>
+          Napisz na WhatsApp
+        </a>
+        <a href="#ceny" class="text-stone-400 hover:text-cream text-sm font-medium tracking-wide flex items-center gap-2 transition-colors">
+          Zobacz cennik
+          <span class="iconify" data-icon="mdi:arrow-down"></span>
+        </a>
+      </div>
+    </div>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+      <span class="iconify text-stone-500 text-2xl" data-icon="mdi:chevron-down"></span>
+    </div>
+  </section>
+
+  <section class="py-16 px-6">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 reveal">
+        <div class="text-center">
+          <div class="text-3xl md:text-4xl font-serif font-semibold text-green-500">2.3K+</div>
+          <div class="text-xs uppercase tracking-[0.2em] text-stone-500 mt-2">Instagram</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl md:text-4xl font-serif font-semibold text-green-500">1K+</div>
+          <div class="text-xs uppercase tracking-[0.2em] text-stone-500 mt-2">Facebook</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl md:text-4xl font-serif font-semibold text-green-500">8+1</div>
+          <div class="text-xs uppercase tracking-[0.2em] text-stone-500 mt-2">Miejsc</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl md:text-4xl font-serif font-semibold text-green-500">2025</div>
+          <div class="text-xs uppercase tracking-[0.2em] text-stone-500 mt-2">Rocznik auta</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="uslugi" class="py-32 px-6">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="text-center mb-20 reveal">
+        <span class="text-xs font-bold uppercase tracking-[0.3em] text-green-500">Co oferujemy</span>
+        <h2 class="font-serif text-4xl md:text-6xl font-normal leading-[0.85] tracking-tighter mt-4">Nasze usługi</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="glass-card rounded-3xl p-8 reveal">
+          <div class="w-14 h-14 rounded-2xl bg-green-500/10 flex items-center justify-center mb-6">
+            <span class="iconify text-green-500 text-2xl" data-icon="mdi:airplane-takeoff"></span>
+          </div>
+          <h3 class="font-serif text-xl font-semibold mb-3">Transfery lotniskowe</h3>
+          <p class="text-stone-400 text-sm leading-relaxed">Monitoring lotów, odbiór z terminala, duża przestrzeń bagażowa. Katowice, Poznań, Kraków, Warszawa, Berlin, Praga.</p>
+        </div>
+        <div class="glass-card rounded-3xl p-8 reveal" style="transition-delay: 100ms;">
+          <div class="w-14 h-14 rounded-2xl bg-green-500/10 flex items-center justify-center mb-6">
+            <span class="iconify text-green-500 text-2xl" data-icon="mdi:map-marker-path"></span>
+          </div>
+          <h3 class="font-serif text-xl font-semibold mb-3">Wycieczki i integracje</h3>
+          <p class="text-stone-400 text-sm leading-relaxed">Wyjazdy integracyjne i firmowe — Karkonosze, Złoty Stok, Szklarska Poręba. Idealne dla działów IT i kadr zarządzających.</p>
+        </div>
+        <div class="glass-card rounded-3xl p-8 reveal" style="transition-delay: 200ms;">
+          <div class="w-14 h-14 rounded-2xl bg-green-500/10 flex items-center justify-center mb-6">
+            <span class="iconify text-green-500 text-2xl" data-icon="mdi:heart-outline"></span>
+          </div>
+          <h3 class="font-serif text-xl font-semibold mb-3">Wesela i uroczystości</h3>
+          <p class="text-stone-400 text-sm leading-relaxed">Transfery kościół – sala – hotel. Nocny shuttle-bus dla gości. Komfortowa Toyota dla 8 osób.</p>
+        </div>
+        <div class="glass-card rounded-3xl p-8 reveal">
+          <div class="w-14 h-14 rounded-2xl bg-green-500/10 flex items-center justify-center mb-6">
+            <span class="iconify text-green-500 text-2xl" data-icon="mdi:account-hard-hat-outline"></span>
+          </div>
+          <h3 class="font-serif text-xl font-semibold mb-3">Przewozy pracownicze</h3>
+          <p class="text-stone-400 text-sm leading-relaxed">Kursy lokalne door-to-door: Biskupice Podgórne, Magnice, Kąty Wr. Obsługa zmian nocnych i weekendowych.</p>
+        </div>
+        <div class="glass-card rounded-3xl p-8 reveal" style="transition-delay: 100ms;">
+          <div class="w-14 h-14 rounded-2xl bg-green-500/10 flex items-center justify-center mb-6">
+            <span class="iconify text-green-500 text-2xl" data-icon="mdi:city-variant-outline"></span>
+          </div>
+          <h3 class="font-serif text-xl font-semibold mb-3">Obsługa we Wrocławiu</h3>
+          <p class="text-stone-400 text-sm leading-relaxed">Wynajem busa z kierowcą: od 130 zł/h. Minimum 3 godziny. Delegacje biznesowe, spotkania, eventy.</p>
+        </div>
+        <div class="glass-card rounded-3xl p-8 reveal" style="transition-delay: 200ms;">
+          <div class="w-14 h-14 rounded-2xl bg-green-500/10 flex items-center justify-center mb-6">
+            <span class="iconify text-green-500 text-2xl" data-icon="mdi:church-outline"></span>
+          </div>
+          <h3 class="font-serif text-xl font-semibold mb-3">Pielgrzymki</h3>
+          <p class="text-stone-400 text-sm leading-relaxed">Wynajem turystyczny od 2,50 zł/km. Wyjazdy grup parafialnych, sanktuaria, miejsca pielgrzymkowe.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="autopark" class="py-32 px-6 bg-stone-900/30 rounded-t-[3rem]">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="text-center mb-20 reveal">
+        <span class="text-xs font-bold uppercase tracking-[0.3em] text-green-500">Nasz pojazd</span>
+        <h2 class="font-serif text-4xl md:text-6xl font-normal leading-[0.85] tracking-tighter mt-4">Toyota Proace Verso</h2>
+        <p class="text-stone-500 mt-4 text-lg font-light">Standard Premium — zabudowa Carpol</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="reveal">
+          <div class="relative overflow-hidden rounded-3xl">
+            <img src="https://picsum.photos/seed/toyota-proace-van-2025-new/800/600.jpg" alt="Toyota Proace Verso 2025" class="w-full h-80 md:h-[28rem] object-cover">
+            <div class="absolute top-4 left-4 bg-green-600 text-white text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full">Nowość 2025</div>
+          </div>
+        </div>
+        <div class="reveal" style="transition-delay: 150ms;">
+          <h3 class="font-serif text-3xl font-semibold mb-2">Profesjonalna zabudowa Carpol</h3>
+          <p class="text-stone-400 leading-relaxed mt-4">Nowa Toyota Proace Verso z 2025 roku, wyposażona w profesjonalną zabudowę pasażerską firmy Carpol — gwarancja najwyższego komfortu podróży.</p>
+          <div class="grid grid-cols-2 gap-4 mt-8">
+            <div class="flex items-center gap-3"><span class="iconify text-green-500 text-xl flex-shrink-0" data-icon="mdi:car-seat"></span><span class="text-sm text-stone-300">Wygodne fotele</span></div>
+            <div class="flex items-center gap-3"><span class="iconify text-green-500 text-xl flex-shrink-0" data-icon="mdi:snowflake"></span><span class="text-sm text-stone-300">Klimatyzacja</span></div>
+            <div class="flex items-center gap-3"><span class="iconify text-green-500 text-xl flex-shrink-0" data-icon="mdi:volume-off"></span><span class="text-sm text-stone-300">Świetne wyciszenie</span></div>
+            <div class="flex items-center gap-3"><span class="iconify text-green-500 text-xl flex-shrink-0" data-icon="mdi:bag-suitcase-outline"></span><span class="text-sm text-stone-300">Pojemny bagażnik</span></div>
+            <div class="flex items-center gap-3"><span class="iconify text-green-500 text-xl flex-shrink-0" data-icon="mdi:shield-check-outline"></span><span class="text-sm text-stone-300">Systemy bezpieczeństwa</span></div>
+            <div class="flex items-center gap-3"><span class="iconify text-green-500 text-xl flex-shrink-0" data-icon="mdi:account-group"></span><span class="text-sm text-stone-300">8 pasażerów + kierowca</span></div>
+            <div class="flex items-center gap-3"><span class="iconify text-green-500 text-xl flex-shrink-0" data-icon="mdi:star-outline"></span><span class="text-sm text-stone-300">Premium wykończenie</span></div>
+            <div class="flex items-center gap-3"><span class="iconify text-green-500 text-xl flex-shrink-0" data-icon="mdi:gas-station-outline"></span><span class="text-sm text-stone-300">Paliwo w cenie</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ceny" class="py-32 px-6">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="text-center mb-20 reveal">
+        <span class="text-xs font-bold uppercase tracking-[0.3em] text-green-500">Cennik</span>
+        <h2 class="font-serif text-4xl md:text-6xl font-normal leading-[0.85] tracking-tighter mt-4">Transparentne ceny</h2>
+        <p class="text-stone-500 mt-4 text-lg font-light">Paliwo, opłaty drogowe i parkingowe <span class="text-green-500 font-medium">wliczone w cenę</span></p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="glass-card rounded-3xl p-8 reveal">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center"><span class="iconify text-green-500 text-2xl" data-icon="mdi:airplane-takeoff"></span></div>
+            <div><h3 class="font-serif text-xl font-semibold">Transfery lotniskowe</h3><p class="text-stone-500 text-xs">Cena za kurs — nie za osobę</p></div>
+          </div>
+          <div>
+            <div class="price-row"><span class="text-sm text-cream">Wrocław (miejski)</span><span class="text-green-500 font-semibold whitespace-nowrap">od 180 zł</span></div>
+            <div class="price-row"><div><span class="text-sm text-cream">Katowice Pyrzowice</span><span class="text-xs text-stone-600 block">KTW</span></div><span class="text-green-500 font-semibold whitespace-nowrap">od 850 zł</span></div>
+            <div class="price-row"><div><span class="text-sm text-cream">Poznań-Ławica</span><span class="text-xs text-stone-600 block">POZ</span></div><span class="text-green-500 font-semibold whitespace-nowrap">od 900 zł</span></div>
+            <div class="price-row"><div><span class="text-sm text-cream">Kraków Balice</span><span class="text-xs text-stone-600 block">KRK</span></div><span class="text-green-500 font-semibold whitespace-nowrap">od 1 350 zł</span></div>
+            <div class="price-row"><span class="text-sm text-cream">Warszawa Okęcie / Modlin</span><span class="text-green-500 font-semibold whitespace-nowrap">od 1 750 zł</span></div>
+            <div class="price-row"><div><span class="text-sm text-cream">Berlin / Praga</span><span class="text-xs text-stone-600 block">Lotniska zagraniczne</span></div><span class="text-green-500 font-semibold whitespace-nowrap">od 1 500 zł</span></div>
+          </div>
+          <p class="text-stone-600 text-xs mt-4 flex items-center gap-1"><span class="iconify text-green-500" data-icon="mdi:information-outline"></span>Monitoring lotów • Odbiór z terminala • Duża przestrzeń bagażowa</p>
+        </div>
+        <div class="space-y-8">
+          <div class="glass-card rounded-3xl p-8 reveal" style="transition-delay: 100ms;">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center"><span class="iconify text-green-500 text-2xl" data-icon="mdi:heart-outline"></span></div>
+              <h3 class="font-serif text-xl font-semibold">Wesela i uroczystości</h3>
+            </div>
+            <div>
+              <div class="price-row"><span class="text-sm text-cream">Transfery lokalne (kościół–sala–hotel)</span><span class="text-green-500 font-semibold whitespace-nowrap">od 450 zł</span></div>
+              <div class="price-row"><span class="text-sm text-cream">Nocny shuttle-bus (ryczałt 3h)</span><span class="text-green-500 font-semibold whitespace-nowrap">od 500 zł</span></div>
+            </div>
+          </div>
+          <div class="glass-card rounded-3xl p-8 reveal" style="transition-delay: 150ms;">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center"><span class="iconify text-green-500 text-2xl" data-icon="mdi:city-variant-outline"></span></div>
+              <h3 class="font-serif text-xl font-semibold">Obsługa we Wrocławiu</h3>
+            </div>
+            <div>
+              <div class="price-row"><span class="text-sm text-cream">Stawka godzinowa z kierowcą</span><span class="text-green-500 font-semibold whitespace-nowrap">od 130 zł/h</span></div>
+              <div class="price-row"><span class="text-sm text-cream">Minimalne zamówienie (3h)</span><span class="text-green-500 font-semibold whitespace-nowrap">od 390 zł</span></div>
+            </div>
+            <p class="text-stone-600 text-xs mt-4">Delegacje biznesowe, spotkania, eventy miejskie</p>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+        <div class="glass-card rounded-3xl p-8 reveal">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center"><span class="iconify text-green-500 text-2xl" data-icon="mdi:map-marker-path"></span></div>
+            <div><h3 class="font-serif text-xl font-semibold">Wyjazdy integracyjne i firmowe</h3><p class="text-stone-500 text-xs">Jednodniowe, tam i z powrotem</p></div>
+          </div>
+          <div>
+            <div class="price-row"><span class="text-sm text-cream">Złoty Stok</span><span class="text-green-500 font-semibold whitespace-nowrap">od 1 100 zł</span></div>
+            <div class="price-row"><span class="text-sm text-cream">Karpacz / Zieleniec / Czarna Góra</span><span class="text-green-500 font-semibold whitespace-nowrap">od 1 300 zł</span></div>
+            <div class="price-row"><span class="text-sm text-cream">Szklarska Poręba</span><span class="text-green-500 font-semibold whitespace-nowrap">od 1 400 zł</span></div>
+          </div>
+          <p class="text-stone-600 text-xs mt-4 flex items-center gap-1"><span class="iconify text-green-500" data-icon="mdi:information-outline"></span>Działy IT, kadry zarządzające, wyjazdy szkoleniowe</p>
+        </div>
+        <div class="glass-card rounded-3xl p-8 reveal" style="transition-delay: 100ms;">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center"><span class="iconify text-green-500 text-2xl" data-icon="mdi:account-hard-hat-outline"></span></div>
+            <div><h3 class="font-serif text-xl font-semibold">Przewozy pracownicze</h3><p class="text-stone-500 text-xs">Stawki netto</p></div>
+          </div>
+          <div>
+            <div class="price-row"><span class="text-sm text-cream">Kursy lokalne (Biskupice, Magnice, Kąty Wr.)</span><span class="text-green-500 font-semibold whitespace-nowrap">od 250 zł</span></div>
+            <div class="price-row"><span class="text-sm text-cream">Zmiany nocne / weekendowe</span><span class="text-stone-400 text-sm whitespace-nowrap">Wycena indywidualna</span></div>
+          </div>
+          <p class="text-stone-600 text-xs mt-4 flex items-center gap-1"><span class="iconify text-green-500" data-icon="mdi:information-outline"></span>Punktualność • Elastyczność tras door-to-door</p>
+        </div>
+      </div>
+      <div class="mt-8 glass-card rounded-3xl p-8 text-center reveal">
+        <div class="flex items-center justify-center gap-3 mb-3"><span class="iconify text-green-500 text-3xl" data-icon="mdi:road-variant"></span><span class="font-serif text-2xl md:text-3xl font-semibold">Stawka bazowa</span></div>
+        <div class="flex items-baseline justify-center gap-2"><span class="text-5xl md:text-6xl font-serif font-semibold text-green-500">2,50</span><span class="text-stone-400 text-xl">zł / km</span></div>
+        <p class="text-stone-500 text-sm mt-3 max-w-lg mx-auto">Stawka kilometrowa dla wynajmu turystycznego i pielgrzymek. Każdą trasę wyceniamy indywidualnie w zależności od specyfiki zlecenia.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="wycieczki" class="py-32 px-6 bg-stone-900/30 rounded-t-[3rem]">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="text-center mb-20 reveal">
+        <span class="text-xs font-bold uppercase tracking-[0.3em] text-green-500">Gdzie jeździmy</span>
+        <h2 class="font-serif text-4xl md:text-6xl font-normal leading-[0.85] tracking-tighter mt-4">Popularne kierunki</h2>
+        <p class="text-stone-500 mt-4 text-lg font-light">Co tydzień nowe trasy — śledź nas na Instagramie!</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
+        <div class="group reveal">
+          <div class="overflow-hidden rounded-2xl"><img src="https://picsum.photos/seed/karkonosze-sniezka/600/400.jpg" alt="Karkonosze" class="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-105"></div>
+          <div class="mt-4 flex items-start justify-between"><div><h3 class="font-serif text-xl font-semibold">Karpacz / Karkonosze</h3><p class="text-stone-500 text-sm mt-1">Śnieżka, Zieleniec, Czarna Góra</p></div><span class="text-green-500 text-sm font-semibold whitespace-nowrap">od 1 300 zł</span></div>
+        </div>
+        <div class="group reveal" style="transition-delay: 100ms;">
+          <div class="overflow-hidden rounded-2xl"><img src="https://picsum.photos/seed/szklarska-poreba-waterfall/600/400.jpg" alt="Szklarska Poręba" class="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-105"></div>
+          <div class="mt-4 flex items-start justify-between"><div><h3 class="font-serif text-xl font-semibold">Szklarska Poręba</h3><p class="text-stone-500 text-sm mt-1">Wodospad Kamieńczyka, Szklarki</p></div><span class="text-green-500 text-sm font-semibold whitespace-nowrap">od 1 400 zł</span></div>
+        </div>
+        <div class="group reveal" style="transition-delay: 200ms;">
+          <div class="overflow-hidden rounded-2xl"><img src="https://picsum.photos/seed/zloty-stok-mine/600/400.jpg" alt="Złoty Stok" class="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-105"></div>
+          <div class="mt-4 flex items-start justify-between"><div><h3 class="font-serif text-xl font-semibold">Złoty Stok</h3><p class="text-stone-500 text-sm mt-1">Kopalnia złota, labirynt</p></div><span class="text-green-500 text-sm font-semibold whitespace-nowrap">od 1 100 zł</span></div>
+        </div>
+        <div class="group reveal">
+          <div class="overflow-hidden rounded-2xl"><img src="https://picsum.photos/seed/castle-moszna-garden/600/400.jpg" alt="Zamek Moszna" class="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-105"></div>
+          <div class="mt-4 flex items-start justify-between"><div><h3 class="font-serif text-xl font-semibold">Zamek Moszna</h3><p class="text-stone-500 text-sm mt-1">Najpiękniejszy zamek Polski</p></div><span class="text-green-500 text-sm font-semibold whitespace-nowrap">Wycena indyw.</span></div>
+        </div>
+        <div class="group reveal" style="transition-delay: 100ms;">
+          <div class="overflow-hidden rounded-2xl"><img src="https://picsum.photos/seed/prague-charles-bridge/600/400.jpg" alt="Praga" class="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-105"></div>
+          <div class="mt-4 flex items-start justify-between"><div><h3 class="font-serif text-xl font-semibold">Praga</h3><p class="text-stone-500 text-sm mt-1">Most Karola, Stare Miasto</p></div><span class="text-green-500 text-sm font-semibold whitespace-nowrap">Wycena indyw.</span></div>
+        </div>
+        <div class="group reveal" style="transition-delay: 200ms;">
+          <div class="overflow-hidden rounded-2xl"><img src="https://picsum.photos/seed/gory-stolowe-bledne/600/400.jpg" alt="Góry Stołowe" class="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-105"></div>
+          <div class="mt-4 flex items-start justify-between"><div><h3 class="font-serif text-xl font-semibold">Góry Stołowe</h3><p class="text-stone-500 text-sm mt-1">Błędne Skały, Szczeliniec Wielki</p></div><span class="text-green-500 text-sm font-semibold whitespace-nowrap">Wycena indyw.</span></div>
+        </div>
+      </div>
+      <div class="text-center mt-12 reveal"><p class="text-stone-500 text-sm">Wszystkie ceny za kurs (do 8 pasażerów). Paliwo i opłaty wliczone. Dokładna wycena po kontakcie.</p></div>
+    </div>
+  </section>
+
+  <section class="py-32 px-6">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-20 items-center">
+        <div class="reveal">
+          <span class="text-xs font-bold uppercase tracking-[0.3em] text-green-500">Dlaczego my</span>
+          <h2 class="font-serif text-4xl md:text-6xl font-normal leading-[0.85] tracking-tighter mt-4">Zaufanie<br>buduje się<br><span class="italic text-green-500">na drodze</span></h2>
+        </div>
+        <div class="space-y-6 reveal" style="transition-delay: 150ms;">
+          <div class="flex items-start gap-4"><div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center flex-shrink-0 mt-1"><span class="iconify text-green-500 text-lg" data-icon="mdi:file-certificate-outline"></span></div><div><h4 class="font-semibold mb-1">Licencja touroperatora</h4><p class="text-stone-400 text-sm leading-relaxed">Oficjalnie zarejestrowany touroperator z odpowiednimi uprawnieniami.</p></div></div>
+          <div class="flex items-start gap-4"><div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center flex-shrink-0 mt-1"><span class="iconify text-green-500 text-lg" data-icon="mdi:bus-clock"></span></div><div><h4 class="font-semibold mb-1">Licencja na przewóz osób</h4><p class="text-stone-400 text-sm leading-relaxed">Uprawnienia do legalnego przewozu osób w pojeździe kategorii 8+1.</p></div></div>
+          <div class="flex items-start gap-4"><div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center flex-shrink-0 mt-1"><span class="iconify text-green-500 text-lg" data-icon="mdi:star-circle-outline"></span></div><div><h4 class="font-semibold mb-1">Nowa Toyota 2025 Premium</h4><p class="text-stone-400 text-sm leading-relaxed">Zabudowa Carpol, wygodne fotele, klimatyzacja, wyciszenie, systemy bezpieczeństwa.</p></div></div>
+          <div class="flex items-start gap-4"><div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center flex-shrink-0 mt-1"><span class="iconify text-green-500 text-lg" data-icon="mdi:currency-eur"></span></div><div><h4 class="font-semibold mb-1">Kompleksowa cena</h4><p class="text-stone-400 text-sm leading-relaxed">Paliwo, opłaty drogowe i parkingowe już wliczone — bez ukrytych kosztów.</p></div></div>
+          <div class="flex items-start gap-4"><div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center flex-shrink-0 mt-1"><span class="iconify text-green-500 text-lg" data-icon="mdi:account-group-outline"></span></div><div><h4 class="font-semibold mb-1">Społeczność 3 300+</h4><p class="text-stone-400 text-sm leading-relaxed">Ponad 2 300 na Instagramie i 1 000 na Facebooku. Sprawdź opinie!</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-24 px-6">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="glass-card rounded-3xl p-12 md:p-16 text-center reveal">
+        <span class="iconify text-green-500 text-4xl mb-6 inline-block" data-icon="mdi:earth"></span>
+        <h2 class="font-serif text-3xl md:text-4xl font-normal leading-tight tracking-tighter">Nasza misja</h2>
+        <p class="text-stone-300 text-lg md:text-xl font-light mt-6 max-w-2xl mx-auto leading-relaxed">Realizujemy misję <span class="text-green-500 font-medium">integracji nowych mieszkańców</span> poprzez profesjonalną turystykę regionalną. Pokazujemy Dolny Śląsk i Polskę komfortowo i z pasją.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt" class="py-32 px-6 bg-stone-900/30 rounded-t-[3rem]">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div class="reveal">
+          <span class="text-xs font-bold uppercase tracking-[0.3em] text-green-500">Kontakt</span>
+          <h2 class="font-serif text-4xl md:text-6xl font-normal leading-[0.85] tracking-tighter mt-4">Zarezerwuj<br><span class="italic text-green-500">jazdę</span></h2>
+          <p class="text-stone-400 text-lg font-light mt-6 leading-relaxed">Napisz lub zadzwoń — odpowiemy w ciągu kilku godzin. Podaj trasę, datę i liczbę osób.</p>
+          <div class="space-y-5 mt-10">
+            <a href="tel:+48512971017" class="flex items-center gap-4 group"><div class="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center group-hover:bg-green-500/20 transition-colors"><span class="iconify text-green-500 text-xl" data-icon="mdi:phone"></span></div><div><div class="text-xs text-stone-500 uppercase tracking-widest">Telefon</div><div class="text-cream font-medium text-lg">+48 512 971 017</div></div></a>
+            <a href="https://wa.me/48512971017?text=Dzie%C5%84%20dobry,%20chcia%C5%82bym%20zapyta%C4%87%20o%20przejazd." target="_blank" class="flex items-center gap-4 group"><div class="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center group-hover:bg-green-500/20 transition-colors"><span class="iconify text-green-500 text-xl" data-icon="mdi:whatsapp"></span></div><div><div class="text-xs text-stone-500 uppercase tracking-widest">WhatsApp</div><div class="text-cream font-medium">+48 512 971 017</div></div></a>
+            <a href="https://www.instagram.com/verolatravel.pl/" target="_blank" class="flex items-center gap-4 group"><div class="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center group-hover:bg-green-500/20 transition-colors"><span class="iconify text-green-500 text-xl" data-icon="mdi:instagram"></span></div><div><div class="text-xs text-stone-500 uppercase tracking-widest">Instagram</div><div class="text-cream font-medium">@verolatravel.pl</div></div></a>
+            <a href="https://www.facebook.com/VerolaTravel" target="_blank" class="flex items-center gap-4 group"><div class="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center group-hover:bg-green-500/20 transition-colors"><span class="iconify text-green-500 text-xl" data-icon="mdi:facebook"></span></div><div><div class="text-xs text-stone-500 uppercase tracking-widest">Facebook</div><div class="text-cream font-medium">Verola Travel</div></div></a>
+          </div>
+        </div>
+        <div class="reveal" style="transition-delay: 150ms;">
+          <form id="contactForm" class="glass-card rounded-3xl p-8 space-y-5">
+            <div><label class="text-xs font-bold uppercase tracking-[0.2em] text-stone-500 mb-2 block">Imię i nazwisko</label><input type="text" required placeholder="Jan Kowalski" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-cream text-sm placeholder:text-stone-600 focus:outline-none focus:border-green-500/50 transition-colors"></div>
+            <div><label class="text-xs font-bold uppercase tracking-[0.2em] text-stone-500 mb-2 block">Telefon</label><input type="tel" required placeholder="+48 XXX XXX XXX" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-cream text-sm placeholder:text-stone-600 focus:outline-none focus:border-green-500/50 transition-colors"></div>
+            <div><label class="text-xs font-bold uppercase tracking-[0.2em] text-stone-500 mb-2 block">Usługa</label><select required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-cream text-sm focus:outline-none focus:border-green-500/50 transition-colors appearance-none cursor-pointer"><option value="" class="bg-stone-900">Wybierz usługę</option><option value="lotnisko" class="bg-stone-900">Transfer lotniskowy</option><option value="wycieczka" class="bg-stone-900">Wycieczka / Integracja firmowa</option><option value="wesele" class="bg-stone-900">Wesele / Uroczystość</option><option value="pracownicze" class="bg-stone-900">Przewóz pracowniczy</option><option value="miejska" class="bg-stone-900">Obsługa miejska Wrocław</option><option value="pielgrzymka" class="bg-stone-900">Pielgrzymka</option><option value="inne" class="bg-stone-900">Inne</option></select></div>
+            <div><label class="text-xs font-bold uppercase tracking-[0.2em] text-stone-500 mb-2 block">Data i trasa</label><input type="text" required placeholder="np. 15 marca, Wrocław → Katowice lotnisko, 5 osób" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-cream text-sm placeholder:text-stone-600 focus:outline-none focus:border-green-500/50 transition-colors"></div>
+            <div><label class="text-xs font-bold uppercase tracking-[0.2em] text-stone-500 mb-2 block">Uwagi</label><textarea rows="3" placeholder="Dodatkowe informacje..." class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-cream text-sm placeholder:text-stone-600 focus:outline-none focus:border-green-500/50 transition-colors resize-none"></textarea></div>
+            <button type="submit" class="w-full bg-green-600 hover:bg-green-500 text-white text-sm font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all hover:scale-[1.02] light-sweep">Wyślij zapytanie</button>
+            <p class="text-stone-600 text-xs text-center">Lub napisz bezpośrednio na WhatsApp — szybciej!</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-16 px-6 border-t border-white/5">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-3"><img src="https://z-cdn-media.chatglm.cn/files/9c5809b0-01fd-4c9a-a666-6affd0610a04.jpeg?auth_key=1878773871-42a0b7b537b04fadae049b42c9d64044-0-5c5b34b0e84966b30ec0074cb4524aa5" alt="Verola Travel" class="h-8 w-8 rounded-lg object-cover"><span class="font-serif text-lg font-semibold">Verola<span class="text-green-500">Travel</span></span></div>
+        <p class="text-stone-600 text-sm text-center">© 2025 Verola Travel • Wrocław, Dolny Śląsk • Licencjonowany touroperator i przewoźnik</p>
+        <div class="flex items-center gap-4">
+          <a href="https://www.instagram.com/verolatravel.pl/" target="_blank" class="text-stone-500 hover:text-green-500 transition-colors"><span class="iconify text-xl" data-icon="mdi:instagram"></span></a>
+          <a href="https://www.facebook.com/VerolaTravel" target="_blank" class="text-stone-500 hover:text-green-500 transition-colors"><span class="iconify text-xl" data-icon="mdi:facebook"></span></a>
+          <a href="https://wa.me/48512971017" target="_blank" class="text-stone-500 hover:text-green-500 transition-colors"><span class="iconify text-xl" data-icon="mdi:whatsapp"></span></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/48512971017?text=Dzie%C5%84%20dobry,%20chcia%C5%82bym%20zapyta%C4%87%20o%20przejazd." target="_blank" class="fixed bottom-6 right-6 z-40 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform" aria-label="WhatsApp"><span class="iconify text-white text-2xl" data-icon="mdi:whatsapp"></span></a>
+
+  <script>
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('active');
@@ -38,20 +514,15 @@
       setTimeout(() => toast.classList.remove('show'), 3500);
     }
 
-    // ===== WHATSAPP FORM =====
     document.getElementById('contactForm').addEventListener('submit', (e) => {
       e.preventDefault();
-
       const form = e.target;
       const inputs = form.querySelectorAll('input, select, textarea');
-
       const imie = inputs[0].value.trim();
       const telefon = inputs[1].value.trim();
       const usluga = inputs[2].value;
       const trasa = inputs[3].value.trim();
       const uwagi = inputs[4].value.trim();
-
-      // Mapa nazw usług
       const uslugaMapa = {
         'lotnisko': 'Transfer lotniskowy',
         'wycieczka': 'Wycieczka / Integracja firmowa',
@@ -61,27 +532,16 @@
         'pielgrzymka': 'Pielgrzymka',
         'inne': 'Inne'
       };
-
-      // Budujemy wiadomość
-      let wiadomosc = `🚌 *Zapytanie ze strony Verola Travel*\n\n`;
-      wiadomosc += `👤 *Imię:* ${imie}\n`;
-      wiadomosc += `📞 *Telefon:* ${telefon}\n`;
-      wiadomosc += `🛠️ *Usługa:* ${uslugaMapa[usluga] || usluga}\n`;
-      wiadomosc += `📍 *Trasa:* ${trasa}\n`;
-      if (uwagi) {
-        wiadomosc += `💬 *Uwagi:* ${uwagi}\n`;
-      }
-
-      // Kodujemy dla URL
-      const encoded = encodeURIComponent(wiadomosc);
-
-      // Otwieramy WhatsApp
-      window.open(`https://wa.me/48512971017?text=${encoded}`, '_blank');
-
-      // Pokazujemy potwierdzenie
+      let wiadomosc = '🚌 *Zapytanie ze strony Verola Travel*\n\n';
+      wiadomosc += '👤 *Imię:* ' + imie + '\n';
+      wiadomosc += '📞 *Telefon:* ' + telefon + '\n';
+      wiadomosc += '🛠️ *Usługa:* ' + (uslugaMapa[usluga] || usluga) + '\n';
+      wiadomosc += '📍 *Trasa:* ' + trasa + '\n';
+      if (uwagi) { wiadomosc += '💬 *Uwagi:* ' + uwagi + '\n'; }
+      window.open('https://wa.me/48512971017?text=' + encodeURIComponent(wiadomosc), '_blank');
       showToast('✓ Przekierowuję do WhatsApp...');
-
-      // Czyścimy formularz
       form.reset();
     });
-</script>
+  </script>
+</body>
+</html>
