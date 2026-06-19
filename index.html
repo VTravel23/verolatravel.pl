@@ -147,34 +147,58 @@
     </div>
   </nav>
 
-  <section class="relative h-[90vh] flex items-center justify-center overflow-hidden rounded-b-[3rem]">
-    <img src="https://images.unsplash.com/photo-1607421899573-0fbfb1fe2a3f?q=80&w=1920&auto=format&fit=crop" alt="Wrocław" class="absolute inset-0 w-full h-full object-cover scale-105" style="animation: pulse 15s ease-in-out infinite;">
-    <div class="absolute inset-0 bg-gradient-to-b from-stone-950 via-stone-950/60 to-stone-950"></div>
+  <section class="relative h-[90vh] flex items-center justify-center overflow-hidden rounded-b-[3rem]" style="background: url('https://images.unsplash.com/photo-1607421899573-0fbfb1fe2a3f?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;">
+    <!-- Напівпрозорий темний фільтр, щоб текст легко читався -->
+    <div class="absolute inset-0 bg-black opacity-50"></div>
+    
     <div class="relative z-10 text-center px-6 max-w-4xl">
-      <div class="animate-fade-in-up">
-        <span class="inline-block text-xs font-bold uppercase tracking-[0.3em] text-green-500 mb-6 bg-green-500/10 px-4 py-2 rounded-full">Wrocław • Od 2,50 zł/km</span>
-      </div>
-     <h1 style="font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 64px; color: #ffffff; letter-spacing: 1px;">
-    Verola <span style="color: #2ecc71; font-style: italic;">Travel</span>
-     </h1>
-      <p class="text-lg md:text-xl font-light text-stone-400 mt-8 max-w-2xl mx-auto leading-relaxed animate-fade-in-up" style="animation-delay: 300ms;">
-        Nowa Toyota Proace Verso 2025. Transfery lotniskowe, wycieczki, wesela. Komfortowo, bezpiecznie, na czas.
-      </p>
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10 animate-fade-in-up" style="animation-delay: 450ms;">
-        <a href="https://wa.me/48512971017?text=Dzie%C5%84%20dobry,%20chcia%C5%82bym%20zapyta%C4%87%20o%20przejazd." target="_blank" class="bg-[#25D366] hover:bg-[#22c55e] text-white text-sm font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all hover:scale-105 flex items-center gap-2">
-          <span class="iconify text-lg" data-icon="mdi:whatsapp"></span>
-          Napisz na WhatsApp
-        </a>
-        <a href="#ceny" class="text-stone-400 hover:text-cream text-sm font-medium tracking-wide flex items-center gap-2 transition-colors">
-          Zobacz cennik
-          <span class="iconify" data-icon="mdi:arrow-down"></span>
-        </a>
-      </div>
+        <div class="animate-fade-in-up">
+            <span class="inline-block text-xs font-bold uppercase tracking-[0.3em] text-green-500 mb-6 bg-green-500/10 px-4 py-2 rounded-full">Verola Travel</span>
+        </div>
+        
+        <h1 style="font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 64px; color: #ffffff; letter-spacing: -0.02em;">
+            Verola <span style="color: #2ecc71; font-style: italic;">Travel</span>
+        </h1>
+        
+        <p class="text-lg md:text-xl font-light text-stone-300 mt-8 max-w-2xl mx-auto leading-relaxed animate-fade-in-up">
+            Nowa Toyota Proace Verso 2025. Transfery lotniskowe, wycieczki, wesela. Komfortowo, bezpiecznie, na czas.
+        </p>
+        
+        <!-- Блок кнопок та соцмереж -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10 animate-fade-in-up">
+            <!-- Головна кнопка WhatsApp -->
+            <a href="https://wa.me/48512971017?text=Dzie%C5%84%20dobry,%20chcia%C5%82bym%20zapyta%C4%87%20o%20przejazd." target="_blank" class="bg-green-600 hover:bg-green-700 text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full text-sm transition-all duration-300 shadow-lg flex items-center gap-2">
+                <span class="iconify text-lg" data-icon="mdi:whatsapp"></span>
+                Napisz na WhatsApp
+            </a>
+            
+            <a href="#ceny" class="text-stone-300 hover:text-white text-sm font-medium tracking-wide flex items-center gap-2 transition-colors">
+                Zobacz cennik
+                <span class="iconify" data-icon="mdi:arrow-down"></span>
+            </a>
+        </div>
+
+        <!-- Кнопки швидкого зв'язку в інших месенджерах та соцмережах -->
+        <div class="social-links-hero animate-fade-in-up" style="margin-top: 30px; display: flex; justify-content: center; gap: 25px;">
+            <!-- Viber -->
+            <a href="viber://chat?number=%2B48512971017" target="_blank" style="color: #ffffff; font-size: 32px; text-decoration: none; transition: 0.3s;" title="Viber">
+                <i class="fab fa-viber"></i>
+            </a>
+            <!-- Telegram -->
+            <a href="https://t.me/+48512971017" target="_blank" style="color: #ffffff; font-size: 32px; text-decoration: none; transition: 0.3s;" title="Telegram">
+                <i class="fab fa-telegram"></i>
+            </a>
+            <!-- Facebook -->
+            <a href="https://facebook.com" target="_blank" style="color: #ffffff; font-size: 32px; text-decoration: none; transition: 0.3s;" title="Facebook">
+                <i class="fab fa-facebook"></i>
+            </a>
+            <!-- Instagram -->
+            <a href="https://instagram.com/verolatravel.pl" target="_blank" style="color: #ffffff; font-size: 32px; text-decoration: none; transition: 0.3s;" title="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
     </div>
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-      <span class="iconify text-stone-500 text-2xl" data-icon="mdi:chevron-down"></span>
-    </div>
-  </section>
+</section>
 
   <section class="py-16 px-6">
     <div class="max-w-screen-xl mx-auto">
